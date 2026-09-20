@@ -238,7 +238,15 @@ function openDetail(id) {
   document.getElementById('modalExt').textContent = img.ext.toUpperCase();
   document.getElementById('infoPanel').classList.add('hidden');
   updateModalIcons(img);
+  updateNavButtons();
   document.getElementById('modal').classList.remove('hidden');
+}
+
+function updateNavButtons() {
+  const list = currentList();
+  const index = list.findIndex(i => i.id === currentDetailId);
+  document.getElementById('prevBtn').classList.toggle('hidden', index <= 0);
+  document.getElementById('nextBtn').classList.toggle('hidden', index === -1 || index >= list.length - 1);
 }
 
 function closeModalFn() {
@@ -429,4 +437,16 @@ document.addEventListener('paste', e => {
     if (items[i].type.startsWith('image/')) files.push(items[i].getAsFile());
   }
   if (files.length) addFiles(files);
+});
+
+document.getElementById('prevBtn').addEventListener('click', () => {
+  const list = currentList();
+  const index = list.findIndex(i => i.id === currentDetailId);
+  if (index > 0) openDetail(list[index - 1].id);
+});
+
+document.getElementById('nextBtn').addEventListener('click', () => {
+  const list = currentList();
+  const index = list.findIndex(i => i.id === currentDetailId);
+  if (index !== -1 && index < list.length - 1) openDetail(list[index + 1].id);
 });
